@@ -236,6 +236,8 @@ Heba Omar - [Twitter](https://twitter.com/jr_dev20) | [Linkedin](https://www.lin
 
 Abdulrafiu Kehinde Lawal(Kennie Larkson) - [Twitter](https://twitter.com/kennie_larkson) | [Linkedin](https://www.linkedin.com/in/kennie-larkson/)
 
+Oluwapelumi Odumosu - [Twitter](https://x.com/oluwapm) | [Linkedin](https://www.linkedin.com/in/oluwapm/)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
