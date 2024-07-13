@@ -238,6 +238,8 @@ Abdulrafiu Kehinde Lawal(Kennie Larkson) - [Twitter](https://twitter.com/kennie_
 
 Oluwapelumi Odumosu - [Twitter](https://x.com/oluwapm) | [Linkedin](https://www.linkedin.com/in/oluwapm/)
 
+Ayomikun Araoye - [Twitter](https://x.com/phoenixdahdev)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
