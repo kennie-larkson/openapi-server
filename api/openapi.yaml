@@ -329,7 +329,7 @@ paths:
                     type: number
                     example: 401
 
-  /organisations/{id}:
+  /api/organisations/{id}:
     get:
       tags:
         - Organisation
@@ -424,7 +424,7 @@ paths:
                   statusCode:
                     type: number
                     example: 500
-  /users/{id}:
+  /api/users/{id}:
     summary: User info
     description: Gets a user by ID
     get:
