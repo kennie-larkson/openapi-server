@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: User Authentication API
+  title: TEAM APHKA OpenAPI Design Document
   version: 1.0.0
   description: API for user registration and authentication.
 servers:
