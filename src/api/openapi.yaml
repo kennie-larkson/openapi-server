@@ -172,6 +172,7 @@ paths:
                   statusCode:
                     type: number
                     example: 500
+
   /auth/reset-password:
     summary: User resets their password
     description: User sets a new password
@@ -424,6 +425,7 @@ paths:
                   statusCode:
                     type: number
                     example: 500
+
   /api/users/{id}:
     summary: User info
     description: Gets a user by ID
@@ -460,19 +462,23 @@ paths:
                       id:
                         type: string
                         example: f45ffab2-ec0c-4c1a-acdb-3baeeb691f0c
-                      first_name:
+                      name:
                         type: string
-                        example: John
-                      last_name:
-                        type: string
-                        example: Doe
+                        example: John Doe
                       email:
                         type: string
                         format: email
-                        example: john.doe@example.com
-                      is_verified:
-                        type: boolean
-                        example: true
+                        example: john@example.com
+                      organization:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: f45ffab2-ec0c-4c1a-acdb-3baeeb691f0c
+                          name:
+                            type: string
+                            example: John's Organisation
+
         "401":
           description: Unauthorized
           content:
@@ -480,9 +486,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                    example: fail
                   message:
                     type: string
                     example: Unauthorized access
@@ -496,9 +499,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                    example: fail
                   message:
                     type: string
                     example: Forbidden access
@@ -512,15 +512,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                    example: fail
                   message:
                     type: string
-                    example: Invalid input
+                    example: Invalid user id
                   statusCode:
                     type: number
                     example: 400
+
         "500":
           description: Internal server error
           content:
@@ -530,120 +528,33 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Unable to create retreive the user"
+                    example: "Unable to retrieve user"
                   statusCode:
                     type: number
                     example: 500
 
-    patch:
+  /api/payments:
+    post:
       tags:
-        - User
+        - Payments
+      summary: Process a payment
       security:
         - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            example: f45ffab2-ec0c-4c1a-acdb-3baeeb691f0c
       requestBody:
-        description: User update payload
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                data:
-                  type: object
-                  properties:
-                    user:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: f45ffab2-ec0c-4c1a-acdb-3baeeb691f0c
-                        first_name:
-                          type: string
-                          example: John
-                        last_name:
-                          type: string
-                          example: Doe
-                        email:
-                          type: string
-                          format: email
-                          example: john.doe@example.com
-                        is_verified:
-                          type: boolean
-                          example: true
+              $ref: "#/components/schemas/Payment"
       responses:
         "200":
-          description: User updated successfully
+          description: Payment processed successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User updated successfully
-                  statusCode:
-                    type: number
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: f45ffab2-ec0c-4c1a-acdb-3baeeb691f0c
-                      first_name:
-                        type: string
-                        example: John
-                      last_name:
-                        type: string
-                        example: Doe
-                      email:
-                        type: string
-                        format: email
-                        example: john.doe@example.com
-                      is_verified:
-                        type: boolean
-                        example: true
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: fail
-                  message:
-                    type: string
-                    example: Unauthorized access
-                  sttatusCode:
-                    type: number
-                    example: 401
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: fail
-                  message:
-                    type: string
-                    example: Forbidden access
-                  statusCode:
-                    type: number
-                    example: 403
+                $ref: "#/components/schemas/PaymentResponse"
         "400":
-          description: Invalid input
+          description: Bad request
           content:
             application/json:
               schema:
@@ -651,70 +562,194 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: fail
                   message:
                     type: string
-                    example: Invalid input
                   statusCode:
                     type: number
                     example: 400
-        "500":
-          description: Internal server error
+
+  /api/notifications:
+    get:
+      tags:
+        - Notifications
+      summary: Get user notifications
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+        "401":
+          description: Unauthorized - Invalid or expired token
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  status:
+                    type: string
                   message:
                     type: string
-                    example: "Unable to retreive the user"
                   statusCode:
                     type: number
-                    example: 500
+                    example: 401
+
+  /api/messages:
+    post:
+      tags:
+        - Messages
+      summary: Send a message
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Message"
+      responses:
+        "200":
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  statusCode:
+                    type: number
+                    example: 400
+
+  /api/email-templates:
+    get:
+      tags:
+        - Email Templates
+      summary: Get email templates
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Email templates retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmailTemplate"
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  statusCode:
+                    type: number
+                    example: 401
 
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
   schemas:
     User:
       type: object
       properties:
-        userId:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
         email:
           type: string
+          format: email
         password:
           type: string
-        phone:
+        name:
           type: string
-      required:
-        - first_name
-        - last_name
-        - email
-        - password
     AuthResponse:
       type: object
       properties:
         accessToken:
           type: string
-        user:
-          $ref: "#/components/schemas/User"
-          # type: object
-          # properties:
-          #   userId:
-          #     type: string
-          #   firstName:
-          #     type: string
-          #   lastName:
-          #     type: string
-          #   email:
-          #     type: string
-          #   phone:
-          #     type: string
+        refreshToken:
+          type: string
+    Organisation:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    Payment:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        paymentMethod:
+          type: string
+    PaymentResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        transactionId:
+          type: string
+        amount:
+          type: number
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        message:
+          type: string
+        read:
+          type: boolean
+    Message:
+      type: object
+      properties:
+        recipientId:
+          type: string
+        content:
+          type: string
+    MessageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        messageId:
+          type: string
+        content:
+          type: string
+    EmailTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
