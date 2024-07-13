@@ -234,7 +234,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Heba Omar - [Twitter](https://twitter.com/jr_dev20) | [Linkedin](https://www.linkedin.com/in/heba-ismael-omar-645965252/)
 
-Abdulrafiu Kehinde Lawal - [Twitter](https://twitter.com/kennie_larkson) | [Linkedin](https://www.linkedin.com/in/kennie-larkson/)
+Abdulrafiu Kehinde Lawal(Kennie Larkson) - [Twitter](https://twitter.com/kennie_larkson) | [Linkedin](https://www.linkedin.com/in/kennie-larkson/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
